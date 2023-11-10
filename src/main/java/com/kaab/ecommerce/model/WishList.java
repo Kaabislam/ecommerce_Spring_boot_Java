@@ -25,9 +25,9 @@ public class WishList {
     public WishList() {
     }
 
-    public WishList(User user, Date createdDate, Product product) {
+    public WishList(User user,Product product) {
         this.user = user;
-        this.createdDate = createdDate;
+        this.createdDate = new Date();
         this.product = product;
     }
 
