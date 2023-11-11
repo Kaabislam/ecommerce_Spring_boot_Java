@@ -1,5 +1,6 @@
 package com.kaab.ecommerce.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 
@@ -17,6 +18,7 @@ public class Product {
 
     // Many to one Relationship with category
     @ManyToOne
+    @JsonIgnore
     @JoinColumn(name="category_id")
     Category category;
 

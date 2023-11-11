@@ -1,6 +1,7 @@
 package com.kaab.ecommerce.controller;
 
 import com.kaab.ecommerce.common.ApiResponse;
+import com.kaab.ecommerce.dto.ProductDto;
 import com.kaab.ecommerce.model.Product;
 import com.kaab.ecommerce.model.User;
 import com.kaab.ecommerce.model.WishList;
@@ -9,10 +10,9 @@ import com.kaab.ecommerce.service.WishListService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/wishlist")
@@ -25,6 +25,7 @@ public class WishListController {
 
     // save product in wishlist
 
+    @PostMapping("/add")
     public ResponseEntity<ApiResponse> addToWishList(@RequestBody Product product, @RequestParam("token") String  token){
         // authenticate the token
         authenticationService.authenticate(token);
@@ -45,4 +46,18 @@ public class WishListController {
 
 
     // get all wishlist item for a user
+    @GetMapping("/{token}")
+    public ResponseEntity<List<ProductDto>> getWishList(@PathVariable ("token") String token){
+        // authenticate the token
+        authenticationService.authenticate(token);
+
+        // find the user
+        User user = authenticationService.getUser(token);
+
+        List<ProductDto> productDtos = wIshListService.getWishListForUser(user);
+        return new ResponseEntity<>(productDtos,HttpStatus.OK);
+
+    }
+
+
 }
