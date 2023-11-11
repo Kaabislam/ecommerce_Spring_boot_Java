@@ -1,6 +1,7 @@
 package com.kaab.ecommerce.service;
 
 import com.kaab.ecommerce.dto.ProductDto;
+import com.kaab.ecommerce.exceptions.ProductNotExistException;
 import com.kaab.ecommerce.model.Category;
 import com.kaab.ecommerce.model.Product;
 import com.kaab.ecommerce.repository.ProductRepository;
@@ -58,5 +59,13 @@ public class ProductService {
         product.setPrice(productDto.getPrice());
         productRepository.save(product);
 
+    }
+
+    public Product findById(Integer productId) {
+        Optional<Product> optionalProduct = productRepository.findById(productId);
+        if(optionalProduct.isEmpty()){
+            throw new ProductNotExistException("product id is invalid : "+productId);
+        }
+        return optionalProduct.get();
     }
 }
