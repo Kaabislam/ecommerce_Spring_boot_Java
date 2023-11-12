@@ -2,6 +2,7 @@ package com.kaab.ecommerce.controller;
 
 import com.kaab.ecommerce.common.ApiResponse;
 import com.kaab.ecommerce.dto.cart.AddToCartDto;
+import com.kaab.ecommerce.dto.cart.CartDto;
 import com.kaab.ecommerce.model.Product;
 import com.kaab.ecommerce.model.User;
 import com.kaab.ecommerce.service.AuthenticationService;
@@ -34,6 +35,16 @@ public class CartController {
 
     // get all items for a user
 
+    @GetMapping("/")
+    public ResponseEntity<CartDto> getCartItems(@RequestParam("token") String token){
+        // find the user
+        User user = authenticationService.getUser(token);
+
+        // get cart items
+        CartDto cartDto = cartService.listCartItems(user);
+
+        return new ResponseEntity<>(cartDto,HttpStatus.OK);
+    }
 
 
     // delete a cart item for a user
