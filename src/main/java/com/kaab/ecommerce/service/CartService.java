@@ -4,6 +4,7 @@ package com.kaab.ecommerce.service;
 import com.kaab.ecommerce.dto.cart.AddToCartDto;
 import com.kaab.ecommerce.dto.cart.CartItemDto;
 import com.kaab.ecommerce.dto.cart.CartDto;
+import com.kaab.ecommerce.exceptions.CustomException;
 import com.kaab.ecommerce.model.Cart;
 import com.kaab.ecommerce.model.Product;
 import com.kaab.ecommerce.model.User;
@@ -14,6 +15,7 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class CartService {
@@ -49,5 +51,19 @@ public class CartService {
         cartDto.setTotalCost(totalCost);
         cartDto.setCartItems(cartItems);
         return cartDto;
+    }
+
+    public void deleteCartService(Integer cartItemId, User user) {
+        // the item id belongs to user
+        Optional<Cart> optionalCart = cartRepository.findById(cartItemId);
+
+        if(optionalCart.isEmpty()){
+            throw new CustomException("Cart item id is invalid : " + cartItemId);
+        }
+        Cart cart = optionalCart.get();
+        if(cart.getUser() != user){
+            throw new CustomException("Cart item does not belong to user : " + cartItemId);
+        }
+        cartRepository.delete(cart);
     }
 }

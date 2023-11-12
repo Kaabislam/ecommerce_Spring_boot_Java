@@ -22,6 +22,8 @@ public class Product {
     @JoinColumn(name="category_id")
     Category category;
 
+    public Product() {
+    }
 
     public Integer getId() {
         return id;
